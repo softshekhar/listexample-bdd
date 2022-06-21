@@ -1,22 +1,19 @@
 package no.example.assessment.stream.model;
 
-import no.example.assessment.stream.constants.TaxSlab;
+import no.example.assessment.stream.util.TaxHelper;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Person implements Serializable {
 
+    private final double income;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
     private Sex gender;
-    private final double income;
 
     public Person(PersonBuilder personBuilder) {
         this.firstName = personBuilder.firstName;
@@ -72,23 +69,6 @@ public class Person implements Serializable {
         return period.getYears();
     }
 
-    public double calculateTaxableAmount() {
-        Optional<TaxSlab> applicableTaxSlab = Arrays.stream(TaxSlab.values()).sorted(Comparator.comparingDouble(TaxSlab::incomeCeiling).reversed()).filter(it -> this.income >= it.incomeCeiling()).findFirst();
-        if (applicableTaxSlab.isPresent()) {
-            return applicableTaxSlab.get().taxPercentage() * this.income * 0.01;
-        } else {
-            return 0.0d;
-        }
-    }
-
-    public double calculateTaxPercentage() {
-        Optional<TaxSlab> applicableTaxSlab = Arrays.stream(TaxSlab.values()).sorted(Comparator.comparingDouble(TaxSlab::incomeCeiling).reversed()).filter(it -> this.income >= it.incomeCeiling()).findFirst();
-        if (applicableTaxSlab.isPresent()) {
-            return applicableTaxSlab.get().taxPercentage();
-        } else {
-            return 0.0d;
-        }
-    }
 
     public boolean isAdult() {
         return getAge() >= 18;
@@ -115,7 +95,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName + " Age: " + this.getAge() + " Income: " + this.income + " Tax to pay: " + this.calculateTaxableAmount() + " Taxable percentage: " + this.calculateTaxPercentage();
+        return this.firstName + " " + this.lastName + " Age: " + this.getAge() + " Income: " + this.income + " Tax to pay: " + TaxHelper.calculateTaxableAmount(this) + " Taxable percentage: " + TaxHelper.calculateTaxPercentage(this);
     }
 
     public enum Sex {

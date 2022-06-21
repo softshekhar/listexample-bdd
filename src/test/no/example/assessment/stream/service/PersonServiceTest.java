@@ -2,6 +2,7 @@ package no.example.assessment.stream.service;
 
 import no.example.assessment.stream.factory.MockPersonFactory;
 import no.example.assessment.stream.model.Person;
+import no.example.assessment.stream.util.TaxHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,7 +60,7 @@ public class PersonServiceTest {
         List<Person> sortedByAge = personService.getSortedByAge();
         for (Person person : sortedByAge) {
             if (person.getIncome() > 100_000.0d) {
-                assertTrue(person.calculateTaxableAmount() > 0.0d);
+                assertTrue(TaxHelper.calculateTaxableAmount(person) > 0.0d);
             }
         }
         printInfo(sortedByAge);
