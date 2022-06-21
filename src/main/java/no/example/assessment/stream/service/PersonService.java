@@ -8,31 +8,31 @@ import java.util.stream.Collectors;
 
 public class PersonService {
 
-	private List<Person> people;
+    private List<Person> people;
 
-	public PersonService(List<Person> people) {
-		this.people = people;
-	}
+    public PersonService(List<Person> people) {
+        this.people = people;
+    }
 
-	public List<Person> getPeopleWithLastName(String lastName) {
-		return this.people.stream().filter(person -> person.getLastName().equals(lastName))
-				.collect(Collectors.toList());
-	}
+    public List<Person> getPeopleWithLastName(String lastName) {
+        return this.people.stream().filter(person -> person.getLastName().equals(lastName))
+                .collect(Collectors.toList());
+    }
 
-	public List<Person> getAdults() {
-		return this.people.stream().filter(person -> person.isAdult()).collect(Collectors.toList());
-	}
+    public List<Person> getAdults() {
+        return this.people.stream().filter(person -> person.isAdult()).collect(Collectors.toList());
+    }
 
-	public List<Person> getSortedByAge() {
+    public List<Person> getSortedByAge() {
 
-		return this.people.stream().sorted(Comparator.comparingInt(Person::getAge).reversed()
-				.thenComparing(Person::getName)).collect(Collectors.toList());
+        return this.people.stream().sorted(Comparator.comparingInt(Person::getAge).reversed()
+                .thenComparing(Person::getName)).collect(Collectors.toList());
 
-	}
+    }
 
-	public float getAverageAgeOfAllAdults() {
-		int totalAge = getAdults().stream().map(adult -> adult.getAge()).reduce(0, (subtotal, element) -> subtotal + element);
-		return Integer.valueOf(totalAge).floatValue() / getAdults().size();
-	}
+    public float getAverageAgeOfAllAdults() {
+        int totalAge = getAdults().stream().map(adult -> adult.getAge()).reduce(0, (subtotal, element) -> subtotal + element);
+        return Integer.valueOf(totalAge).floatValue() / getAdults().size();
+    }
 
 }

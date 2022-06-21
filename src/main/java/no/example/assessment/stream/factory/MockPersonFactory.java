@@ -7,20 +7,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MockPersonFactory implements PersonFactory {
-	@Override public List<Person> getAllPersons() {
-		return Arrays
-				.asList(new Person("Huey", "Duck", LocalDate.of(getYearOfBirth(14), 12, 12), Person.Sex.MALE),
-						new Person("Scrooge", "McDuck", LocalDate.of(getYearOfBirth(42), 11, 1), Person.Sex.MALE),
-						new Person("Louie", "Duck", LocalDate.of(getYearOfBirth(15), 10, 12), Person.Sex.MALE),
-						new Person("Dewey", "Duck", LocalDate.of(getYearOfBirth(16), 9, 5), Person.Sex.MALE),
-						new Person("Donald", "Duck", LocalDate.of(getYearOfBirth(22), 2, 2), Person.Sex.MALE),
-						new Person("Daisy", "Duck", LocalDate.of(getYearOfBirth(19), 4, 2), Person.Sex.FEMALE),
-						new Person("Gus", "Goose", LocalDate.of(getYearOfBirth(22), 7, 5), Person.Sex.MALE));
+    @Override
+    public List<Person> getAllPersons() {
+        return Arrays
+                .asList(
+                        new Person.PersonBuilder().firstName("Huey").lastName("Duck").birthday(LocalDate.of(getYearOfBirth(14), 12, 12)).gender(Person.Sex.MALE).build(),
+                        new Person.PersonBuilder().firstName("Scrooge").lastName("McDuck").birthday(LocalDate.of(getYearOfBirth(42), 11, 1)).gender(Person.Sex.MALE).build(),
+                        new Person.PersonBuilder().firstName("Louie").lastName("Duck").birthday(LocalDate.of(getYearOfBirth(15), 10, 12)).gender(Person.Sex.MALE).build(),
+                        new Person.PersonBuilder().firstName("Dewey").lastName("Duck").birthday(LocalDate.of(getYearOfBirth(16), 9, 5)).gender(Person.Sex.MALE).build(),
+                        new Person.PersonBuilder().firstName("Donald").lastName("Duck").birthday(LocalDate.of(getYearOfBirth(22), 2, 2)).gender(Person.Sex.MALE).build(),
+                        new Person.PersonBuilder().firstName("Daisy").lastName("Duck").birthday(LocalDate.of(getYearOfBirth(19), 4, 2)).gender(Person.Sex.FEMALE).build(),
+                        new Person.PersonBuilder().firstName("Gus").lastName("Goose").birthday(LocalDate.of(getYearOfBirth(22), 7, 5)).gender(Person.Sex.MALE).build());
+    }
 
-	}
 
-
-	private int getYearOfBirth(int age) {
-		return LocalDate.now().getYear() - age;
-	}
+    private int getYearOfBirth(int age) {
+        return LocalDate.now().getYear() - age;
+    }
 }
