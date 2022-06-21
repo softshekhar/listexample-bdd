@@ -1,26 +1,29 @@
 package no.example.assessment.stream.model;
 
+import no.example.assessment.stream.constants.TaxSlab;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Person implements Serializable {
-
-    public enum Sex {
-        MALE, FEMALE
-    }
 
     private String firstName;
     private String lastName;
     private LocalDate birthday;
     private Sex gender;
+    private final double income;
 
     public Person(PersonBuilder personBuilder) {
         this.firstName = personBuilder.firstName;
         this.lastName = personBuilder.lastName;
         this.birthday = personBuilder.birthday;
         this.gender = personBuilder.gender;
+        this.income = personBuilder.income;
     }
 
     public String getFirstName() {
@@ -59,10 +62,32 @@ public class Person implements Serializable {
         return this.getFirstName() + " " + this.getLastName();
     }
 
+    public double getIncome() {
+        return income;
+    }
+
     public int getAge() {
         LocalDate today = LocalDate.now();
         Period period = Period.between(birthday, today);
         return period.getYears();
+    }
+
+    public double calculateTaxableAmount() {
+        Optional<TaxSlab> applicableTaxSlab = Arrays.stream(TaxSlab.values()).sorted(Comparator.comparingDouble(TaxSlab::incomeCeiling).reversed()).filter(it -> this.income >= it.incomeCeiling()).findFirst();
+        if (applicableTaxSlab.isPresent()) {
+            return applicableTaxSlab.get().taxPercentage() * this.income * 0.01;
+        } else {
+            return 0.0d;
+        }
+    }
+
+    public double calculateTaxPercentage() {
+        Optional<TaxSlab> applicableTaxSlab = Arrays.stream(TaxSlab.values()).sorted(Comparator.comparingDouble(TaxSlab::incomeCeiling).reversed()).filter(it -> this.income >= it.incomeCeiling()).findFirst();
+        if (applicableTaxSlab.isPresent()) {
+            return applicableTaxSlab.get().taxPercentage();
+        } else {
+            return 0.0d;
+        }
     }
 
     public boolean isAdult() {
@@ -90,7 +115,11 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName + " Age: " + this.getAge();
+        return this.firstName + " " + this.lastName + " Age: " + this.getAge() + " Income: " + this.income + " Tax to pay: " + this.calculateTaxableAmount() + " Taxable percentage: " + this.calculateTaxPercentage();
+    }
+
+    public enum Sex {
+        MALE, FEMALE
     }
 
     public static class PersonBuilder {
@@ -98,6 +127,8 @@ public class Person implements Serializable {
         private String lastName;
         private LocalDate birthday;
         private Sex gender;
+
+        private double income;
 
         public PersonBuilder firstName(String firstName) {
             this.firstName = firstName;
@@ -116,6 +147,11 @@ public class Person implements Serializable {
 
         public PersonBuilder gender(Sex gender) {
             this.gender = gender;
+            return this;
+        }
+
+        public PersonBuilder income(double income) {
+            this.income = income;
             return this;
         }
 

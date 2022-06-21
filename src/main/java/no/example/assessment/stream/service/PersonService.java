@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class PersonService {
 
-    private List<Person> people;
+    private final List<Person> people;
 
     public PersonService(List<Person> people) {
         this.people = people;

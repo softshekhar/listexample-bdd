@@ -53,6 +53,18 @@ public class PersonServiceTest {
         assertTrue(averageAgeOfAdults >= 18.0f);
     }
 
+    @Test
+    public void taxToPayTest() {
+        System.out.println("Printing tax to pay for each adult");
+        List<Person> sortedByAge = personService.getSortedByAge();
+        for (Person person : sortedByAge) {
+            if (person.getIncome() > 100_000.0d) {
+                assertTrue(person.calculateTaxableAmount() > 0.0d);
+            }
+        }
+        printInfo(sortedByAge);
+    }
+
     private void printInfo(List<Person> people) {
         people.forEach(System.out::println);
         System.out.println("-----------------------------------------------------------");
