@@ -2,11 +2,13 @@ package no.example.assessment.stream.service;
 
 import no.example.assessment.stream.factory.MockPersonFactory;
 import no.example.assessment.stream.model.Person;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PersonServiceTest {
 
@@ -21,15 +23,14 @@ public class PersonServiceTest {
 	@Test public void lastNameTest() {
 		System.out.println("Printing persons with surname Duck");
 		List<Person> listOfDucks = personService.getPeopleWithLastName("Duck");
-		BDDAssertions.then(listOfDucks.size()).isEqualTo(5);
-
+		assertEquals(5, listOfDucks.size());
 		printInfo(listOfDucks);
 	}
 
 	@Test public void adultsTest() {
 		System.out.println("Printing all Adults");
 		List<Person> listOfAdults = personService.getAdults();
-		BDDAssertions.then(listOfAdults.size()).isEqualTo(4);
+		assertEquals(4, listOfAdults.size());
 
 		printInfo(listOfAdults);
 	}
@@ -44,7 +45,7 @@ public class PersonServiceTest {
 		System.out.println("Printing average age of adults");
 		float averageAgeOfAdults = personService.getAverageAgeOfAllAdults();
 		System.out.println("Average age of adults : " + averageAgeOfAdults);
-		BDDAssertions.then(averageAgeOfAdults).isGreaterThanOrEqualTo(18.0f);
+		assertTrue(averageAgeOfAdults >= 18.0f);
 	}
 
 	private void printInfo(List<Person> people) {
